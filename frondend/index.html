@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart AI Resume Builder - OOP Showcase</title>
+
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Main Stylesheet with Animations & Themes -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="theme-modern">
+
+    <!-- Animated Ambient Glowing Orbs -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- ================= HEADER ================= -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="brand-wrapper">
+                <h1 class="brand-title">
+                    <i class="fa-solid fa-robot"></i>
+                    Smart AI Resume Builder
+                </h1>
+                <p class="brand-subtitle">
+                    Intelligent ATS-Optimized Resume Creator • Powered by Spring Boot OOP Backend & AI
+                </p>
+            </div>
+
+            <div class="header-badges">
+                <span class="badge-pill" id="backendStatusPill" title="Backend connection status">
+                    <span class="badge-pulse-dot"></span>
+                    <span id="backendStatusText">Backend Online (Port 5000)</span>
+                </span>
+                <button type="button" class="badge-pill" onclick="openAtsModal()" style="cursor:pointer;" title="Check Resume ATS Score">
+                    <i class="fa-solid fa-chart-line" style="color: #6ee7b7;"></i>
+                    ATS Score Checker
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTAINER ================= -->
+    <main class="app-container">
+
+        <!-- ================= FORM VIEW (INPUTS) ================= -->
+        <section id="formView" class="view-section active-view">
+
+            <div class="view-header">
+                <h2>Build Your Professional AI Resume</h2>
+                <p>Fill in your credentials below. Use our AI tools to optimize summaries, bullet points, and skills.</p>
+            </div>
+
+            <!-- Quick Toolbar -->
+            <div class="quick-tools-bar">
+                <div class="tools-left">
+                    <button type="button" class="tool-btn" onclick="loadSampleData()" title="Prefill with student sample data">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="color:#7c3aed;"></i>
+                        Load Sample Data
+                    </button>
+                    <button type="button" class="tool-btn" onclick="resetForm()" title="Clear all input fields">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        Clear Form
+                    </button>
+                </div>
+                <div class="tools-right">
+                    <button type="button" class="tool-btn" onclick="saveToBackendDisk()" title="Save resume file to backend disk (File Operations)">
+                        <i class="fa-solid fa-floppy-disk" style="color:#2563eb;"></i>
+                        Save to Disk
+                    </button>
+                    <button type="button" class="tool-btn" onclick="openLoadModal()" title="Load previously saved resumes">
+                        <i class="fa-solid fa-folder-open" style="color:#d97706;"></i>
+                        Load Saved Resumes
+                    </button>
+                </div>
+            </div>
+
+            <!-- 1. PERSONAL DETAILS -->
+            <div class="card">
+                <h3>
+                    <i class="fa-solid fa-user"></i>
+                    1. Personal Details
+                </h3>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fullName">Full Name <span style="color:#ef4444;">*</span></label>
+                        <input type="text" id="fullName" placeholder="e.g. Alex Morgan" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="careerGoal">Target Job Title / Career Goal</label>
+                        <input type="text" id="careerGoal" placeholder="e.g. Java Full Stack Developer">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span style="color:#ef4444;">*</span></label>
+                        <input type="email" id="email" placeholder="e.g. alex.morgan@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" placeholder="e.g. +91 9876543210">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location / City</label>
+                        <input type="text" id="location" placeholder="e.g. Coimbatore, Tamil Nadu">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn Profile URL</label>
+                        <input type="text" id="linkedin" placeholder="linkedin.com/in/alexmorgan">
+                    </div>
+
+                    <div class="form-group span-2">
+                        <label for="github">GitHub / Portfolio URL</label>
+                        <input type="text" id="github" placeholder="github.com/alexmorgan">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. PROFESSIONAL SUMMARY -->
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>
+                        <i class="fa-solid fa-file-lines"></i>
+                        2. Professional Summary
+                    </h3>
+                    <button type="button" class="ai-btn" id="btnEnhanceSummary" onclick="enhanceSummary()">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        AI Enhance Summary
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="summary">
+                        Summary Statement
+                        <span class="label-hint">Write 2-4 sentences or click AI Enhance to generate one</span>
+                    </label>
+                    <textarea id="summary" rows="4" placeholder="Dedicated Computer Science student with a passion for software development..."></textarea>
+                </div>
+            </div>
+
+            <!-- 3. EXPERIENCE -->
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>
+                        <i class="fa-solid fa-briefcase"></i>
+                        3. Work & Internship Experience
+                    </h3>
+                    <button type="button" class="add-btn" onclick="addExperience()">
+                        <i class="fa-solid fa-plus"></i>
+                        Add Experience
+                    </button>
+                </div>
+
+                <div id="experienceList" class="dynamic-list-container">
+                    <!-- Dynamic Experience Items -->
+                </div>
+            </div>
+
+            <!-- 4. PROJECTS -->
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>
+                        <i class="fa-solid fa-laptop-code"></i>
+                        4. Technical Projects
+                    </h3>
+                    <button type="button" class="add-btn" onclick="addProject()">
+                        <i class="fa-solid fa-plus"></i>
+                        Add Project
+                    </button>
+                </div>
+
+                <div id="projectList" class="dynamic-list-container">
+                    <!-- Dynamic Project Items -->
+                </div>
+            </div>
+
+            <!-- 5. EDUCATION -->
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        5. Education & Academics
+                    </h3>
+                    <button type="button" class="add-btn" onclick="addEducation()">
+                        <i class="fa-solid fa-plus"></i>
+                        Add Degree
+                    </button>
+                </div>
+
+                <div id="educationList" class="dynamic-list-container">
+                    <!-- Dynamic Education Items -->
+                </div>
+            </div>
+
+            <!-- 6. TECHNICAL SKILLS -->
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>
+                        <i class="fa-solid fa-code"></i>
+                        6. Technical Skills
+                    </h3>
+                    <button type="button" class="ai-btn" onclick="suggestSkills()">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        AI Suggest Skills
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="technicalSkills">
+                        Skills (comma-separated)
+                        <span class="label-hint">e.g. Java, Spring Boot, MySQL, REST APIs, Git</span>
+                    </label>
+                    <input type="text" id="technicalSkills" placeholder="Java, Spring Boot, MySQL, REST APIs, Git, React, Docker">
+                </div>
+
+                <!-- AI Skill Chips Container -->
+                <div id="aiSkillSuggestionsBox" class="ai-skill-box" style="display: none;">
+                    <div class="ai-skill-box-header">
+                        <span><i class="fa-solid fa-sparkles"></i> AI Recommended Skills for You:</span>
+                        <span class="label-hint">Click a skill to add it</span>
+                    </div>
+                    <div id="aiSkillChips" class="ai-skill-chips"></div>
+                </div>
+            </div>
+
+            <!-- 7. CERTIFICATIONS -->
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>
+                        <i class="fa-solid fa-certificate"></i>
+                        7. Certifications & Courses
+                    </h3>
+                    <button type="button" class="add-btn" onclick="addCertificate()">
+                        <i class="fa-solid fa-plus"></i>
+                        Add Certificate
+                    </button>
+                </div>
+
+                <div id="certificateList" class="dynamic-list-container">
+                    <!-- Dynamic Certificate Items -->
+                </div>
+            </div>
+
+            <!-- 8. ACHIEVEMENTS -->
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>
+                        <i class="fa-solid fa-trophy"></i>
+                        8. Honors & Achievements
+                    </h3>
+                    <button type="button" class="add-btn" onclick="addAchievement()">
+                        <i class="fa-solid fa-plus"></i>
+                        Add Achievement
+                    </button>
+                </div>
+
+                <div id="achievementList" class="dynamic-list-container">
+                    <!-- Dynamic Achievement Items -->
+                </div>
+            </div>
+
+            <!-- GENERATE ACTION BAR -->
+            <div class="action-bar">
+                <button type="button" class="generate-btn" onclick="generateResume()">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Generate AI Resume Preview
+                </button>
+            </div>
+
+        </section>
+
+
+        <!-- ================= OUTPUT VIEW (PREVIEW & EXPORT) ================= -->
+        <section id="outputView" class="view-section hidden-view">
+
+            <!-- CONTROLS BAR -->
+            <div class="controls-bar">
+                <div class="controls-group">
+                    <button type="button" class="secondary-btn" onclick="showFormView()">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Edit Details
+                    </button>
+
+                    <button type="button" class="tool-btn" onclick="openAtsModal()">
+                        <i class="fa-solid fa-chart-pie" style="color:#059669;"></i>
+                        ATS Score
+                    </button>
+                </div>
+
+                <!-- THEME SELECTOR -->
+                <div class="controls-group">
+                    <span class="selector-label">Theme:</span>
+                    <div class="theme-pill-group">
+                        <button type="button" class="theme-btn active" data-theme="modern" onclick="setTheme('modern')" title="Modern Azure">
+                            <span class="color-dot" style="background:#2563eb;"></span>
+                            Modern
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="classic" onclick="setTheme('classic')" title="Executive Classic">
+                            <span class="color-dot" style="background:#1e293b;"></span>
+                            Classic
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="emerald" onclick="setTheme('emerald')" title="Emerald Tech">
+                            <span class="color-dot" style="background:#059669;"></span>
+                            Emerald
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="coral" onclick="setTheme('coral')" title="Sunset Coral">
+                            <span class="color-dot" style="background:#e11d48;"></span>
+                            Coral
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="cyber" onclick="setTheme('cyber')" title="Cyber Violet">
+                            <span class="color-dot" style="background:#7c3aed;"></span>
+                            Cyber
+                        </button>
+                        <button type="button" class="theme-btn" data-theme="amber" onclick="setTheme('amber')" title="Golden Amber">
+                            <span class="color-dot" style="background:#d97706;"></span>
+                            Amber
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LAYOUT STYLE SELECTOR -->
+                <div class="controls-group">
+                    <span class="selector-label">Style Pattern:</span>
+                    <div class="layout-pill-group">
+                        <button type="button" class="layout-btn active" data-layout="single" onclick="setLayout('single')" title="Classic ATS Single Column">
+                            <i class="fa-solid fa-bars"></i>
+                            Classic ATS
+                        </button>
+                        <button type="button" class="layout-btn" data-layout="twocolumn" onclick="setLayout('twocolumn')" title="Modern Two-Column Sidebar">
+                            <i class="fa-solid fa-table-columns"></i>
+                            Sidebar
+                        </button>
+                        <button type="button" class="layout-btn" data-layout="timeline" onclick="setLayout('timeline')" title="Interactive Timeline with node connectors">
+                            <i class="fa-solid fa-route"></i>
+                            Timeline
+                        </button>
+                        <button type="button" class="layout-btn" data-layout="executive" onclick="setLayout('executive')" title="Executive Full-Width Header Banner">
+                            <i class="fa-solid fa-id-card"></i>
+                            Executive
+                        </button>
+                        <button type="button" class="layout-btn" data-layout="minimal" onclick="setLayout('minimal')" title="Compact High-Density Grid">
+                            <i class="fa-solid fa-border-all"></i>
+                            Minimal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- EXPORT ACTIONS -->
+                <div class="controls-group">
+                    <button type="button" class="tool-btn" onclick="exportFile('md')" title="Export as Markdown (.md)">
+                        <i class="fa-brands fa-markdown"></i>
+                        MD
+                    </button>
+                    <button type="button" class="tool-btn" onclick="exportFile('txt')" title="Export as Plain Text (.txt)">
+                        <i class="fa-regular fa-file-lines"></i>
+                        TXT
+                    </button>
+                    <button type="button" class="tool-btn" onclick="saveToBackendDisk()" title="Save JSON to backend disk">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Save
+                    </button>
+                    <button type="button" class="print-btn" onclick="window.print()">
+                        <i class="fa-solid fa-print"></i>
+                        Print / PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- RESUME DOCUMENT SHEET -->
+            <div class="resume-wrapper">
+                <article id="resumeDocument" class="resume-sheet layout-single">
+                    <!-- Dynamic Resume Document Content Injected by script.js -->
+                </article>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ================= ATS SCORE MODAL ================= -->
+    <div id="atsModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-chart-line" style="color:#10b981;"></i> ATS Resume Score Analysis</h3>
+                <button type="button" class="close-modal-btn" onclick="closeAtsModal()">&times;</button>
+            </div>
+
+            <div class="ats-score-hero">
+                <div id="atsScoreCircle" class="ats-score-circle score-high">
+                    <span id="atsScoreNum" class="ats-score-num">--</span>
+                    <span class="ats-score-total">/ 100</span>
+                </div>
+                <div class="ats-score-summary">
+                    <h4 id="atsGrade">Calculating...</h4>
+                    <p id="atsFeedback">Our AI engine is analyzing section completeness, keyword density, and formatting rules.</p>
+                </div>
+            </div>
+
+            <div class="ats-categories" id="atsCategoryList">
+                <!-- Injected Category Progress Bars -->
+            </div>
+
+            <div class="ats-tips-box" id="atsStrengthsBox">
+                <h5><i class="fa-solid fa-circle-check" style="color:#16a34a;"></i> Detected Strengths</h5>
+                <ul id="atsStrengthsList"></ul>
+            </div>
+
+            <div class="ats-tips-box" id="atsImprovementsBox" style="background:#fffbeb; border-color:#fde68a;">
+                <h5 style="color:#b45309;"><i class="fa-solid fa-triangle-exclamation" style="color:#d97706;"></i> Recommended Improvements</h5>
+                <ul id="atsImprovementsList" style="color:#92400e;"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= LOAD RESUME MODAL ================= -->
+    <div id="loadModal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-folder-open" style="color:#2563eb;"></i> Saved Resumes (Disk)</h3>
+                <button type="button" class="close-modal-btn" onclick="closeLoadModal()">&times;</button>
+            </div>
+
+            <p style="font-size:13px; color:#64748b; margin-bottom:15px;">
+                Resumes loaded directly from backend File Operations storage (<code>/saved_resumes/</code>).
+            </p>
+
+            <div id="savedResumesList" style="display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;">
+                <p style="text-align:center; color:#94a3b8; padding:20px;">Loading saved files...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
+    <div id="toastContainer"></div>
+
+    <!-- Client Script -->
+    <script src="script.js"></script>
+</body>
+</html>
